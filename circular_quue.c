@@ -4,15 +4,15 @@
 // This is used to print
 
 //There are two values in Queue one for insert Enqueue (rear[r]) and another is for remove (Dequeue (back[b] ));
-struct queue{
+struct circularQueue{
     int size;
     int r;
     int f;
     int *arr;
 };
 
-int isFull(struct queue *q){ //is full condition.
-    if(q->r == q->size - 1){
+int isFull(struct circularQueue *q){ //is full condition.
+    if((q->r+1) % (q->size) == q->f){
         return 1;
     }
     //return 0;
@@ -21,7 +21,7 @@ int isFull(struct queue *q){ //is full condition.
     }
 }
 
-int isEmpty(struct queue *q){
+int isEmpty(struct circularQueue *q){
     if(q->f == q->r){
         return 1;
     }
@@ -30,64 +30,65 @@ int isEmpty(struct queue *q){
     }
 }
 
-void enqueue(struct queue *q, int value){
+void enqueue(struct circularQueue *q, int value){
     if(isFull(q)){
-        printf("Queue Overflow");
+        printf("Queue Overflow \n");
     } else {
-        q->r = q->r+1;
+        printf("Enqueued Element %d\n", value);
+        q->r = (q->r+1)% q->size; //Circular increment.
         q->arr[q->r] = value;
     }
 }
 
-int dequeue(struct queue *q){
-    int a = -1;
+int dequeue(struct circularQueue *q){
+    int val = -1;
 
     if(isEmpty(q)){
-        printf("No Element to Dequeue"); //---> Empty function. or isEmpty();
+        printf("No Element to Dequeue \n"); //---> Empty function. or isEmpty();
     }
     // if(q->f == q->r){
     //     printf("No Element to Dequeue"); //---> Empty function. or isEmpty();
 
     // }
      else {
-        q->f++;
-        a = q->arr[q->f];
+        q->f = (q->f+1)%q->size;
+        val = q->arr[q->f];
     }
-    return a;
+    return val;
 }
 
 int main(){
 
-    struct queue q;
-    q.f = q.r = -1;
+   struct circularQueue q;
+    q.f = q.r = 0;
     q.size = 4;
     q.arr = (int *) malloc (q.size * sizeof(int));
 
 
 // Enqueue few Elements.
-enqueue(&q, 12);
+enqueue(&q, 12); //Here q is the variable not the pointer.
 enqueue(&q, 15);
 enqueue(&q, 20);
-enqueue(&q, 20);
+// enqueue(&q, 20);
 
 printf("Dequeuing Element %d \n", dequeue(&q));
 printf("Dequeuing Element %d \n", dequeue(&q));
 printf("Dequeuing Element %d \n", dequeue(&q));
-printf("Dequeuing Element %d \n", dequeue(&q));
+// printf("Dequeuing Element %d \n", dequeue(&q));
+enqueue(&q, 20);
+enqueue(&q, 20);
+enqueue(&q, 20);
 
 
 
 
 
 if(isEmpty(&q)){
-    printf("Queue is Empty \n");
+    printf("******************* Queue is Empty ************\n");
 }
 
 if(isFull(&q)){
-    printf("Queue is full \n");
+    printf("\n ****************** Queue is full **************\n");
 }
-    
-
-    return 0;
 
 }
